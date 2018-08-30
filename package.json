@@ -1,0 +1,26 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "Socketio demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "10.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bongbatman/node-socketio-chat-demo.git"
+  },
+  "author": "Nishant Dubey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bongbatman/node-socketio-chat-demo/issues"
+  },
+  "homepage": "https://github.com/bongbatman/node-socketio-chat-demo#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
