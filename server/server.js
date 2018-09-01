@@ -24,9 +24,39 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log("new user connected"); //registers an event listener
 
+
+    /**
+     * emit custom event
+     */
+    // socket.emit('email', {
+    //     from: "nish05@gmail.com",
+    //     text: "Hey what's up",
+    //     createdAt: 1999
+    // });
+
+    socket.emit('newMsg' , {
+       from: "Isha",
+        text: "Hello bc",
+        createdAt: Date.now()
+    });
+
+    socket.on('createMsg', (msg) => {
+        console.log(msg);
+    });
     socket.on('disconnect', () => {
        console.log("User was disconnected");
     });
+
+    /**
+     * listening to custom event emitted from client
+     */
+    // socket.on('createEmail', (emailData) => {
+    //     console.log(emailData);
+    //
+    //     //can emit new event after a certain even
+    //     // socket.emit('email', emailData);
+    // });
+
 });
 
 server.listen(port, () => {
