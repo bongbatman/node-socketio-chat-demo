@@ -34,17 +34,36 @@ io.on('connection', (socket) => {
     //     createdAt: 1999
     // });
 
+    //welcome new user
+    socket.emit('welcome', {
+       text: "Welcome from Admin"
+    });
+
+    //broadcast new user to others
+    socket.broadcast.emit('newUserJoined', {
+       text: "New User Joined"
+    });
+
 
     socket.on('createMsg', (msg) => {
         console.log(msg);
         /**
-         * io.emit broadcasts the msg to every connection
+         * io.emit emits the msg to every connection
          */
         io.emit('newMsg', {
             from: msg.from,
             text: msg.text,
             createdAt: new Date().getTime()
-        })
+        });
+
+        /**
+         * this is the way to broadcast events to everyone except the one who sent it
+         */
+        // socket.broadcast.emit('newMsg', {
+        //         from: msg.from,
+        //         text: msg.text,
+        //         createdAt: new Date().getTime()
+        //     });
 
     });
     socket.on('disconnect', () => {

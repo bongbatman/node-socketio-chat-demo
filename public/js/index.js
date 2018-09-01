@@ -32,3 +32,13 @@ socket.on('disconnect', function () {
 socket.on('newMsg', function (msg) {
    console.log(`${msg.from} says: ${msg.text} at ${new Date(msg.createdAt)}`);
 });
+
+//welcome new user
+socket.on('welcome', function (msg) {
+    console.log(msg.text);
+});
+
+//broadcast new user to others
+socket.on('newUserJoined', function (msg) {
+    console.log(msg.text);
+});
