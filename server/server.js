@@ -34,14 +34,18 @@ io.on('connection', (socket) => {
     //     createdAt: 1999
     // });
 
-    socket.emit('newMsg' , {
-       from: "Isha",
-        text: "Hello bc",
-        createdAt: Date.now()
-    });
 
     socket.on('createMsg', (msg) => {
         console.log(msg);
+        /**
+         * io.emit broadcasts the msg to every connection
+         */
+        io.emit('newMsg', {
+            from: msg.from,
+            text: msg.text,
+            createdAt: new Date().getTime()
+        })
+
     });
     socket.on('disconnect', () => {
        console.log("User was disconnected");
@@ -53,7 +57,7 @@ io.on('connection', (socket) => {
     // socket.on('createEmail', (emailData) => {
     //     console.log(emailData);
     //
-    //     //can emit new event after a certain even
+    //     //can emit new event after a certain event. But it emits event only to single connection or event
     //     // socket.emit('email', emailData);
     // });
 

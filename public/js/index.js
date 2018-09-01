@@ -15,10 +15,7 @@ socket.on('connect', function () {
     //        createdAt: 2000
     //    });
 
-    socket.emit('createMsg', {
-       from: "billa mama",
-       text: "Billa kahe meow meow"
-    });
+
 
 });
 
