@@ -35,10 +35,10 @@ socket.on('newMsg', function (msg) {
 
 //welcome new user
 socket.on('welcome', function (msg) {
-    console.log(msg.text);
+    console.log(msg);
 });
 
 //broadcast new user to others
 socket.on('newUserJoined', function (msg) {
-    console.log(msg.text);
+    console.log(msg);
 });
