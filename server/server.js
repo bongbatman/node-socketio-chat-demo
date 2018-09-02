@@ -49,7 +49,8 @@ io.on('connection', (socket) => {
          * io.emit emits the msg to every connection
          */
         io.emit('newMsg', generateMsg(msg.from, msg.text));
-        callback("This is from server");
+        // callback("This is from server");
+        callback();
         /**
          * this is the way to broadcast events to everyone except the one who sent it
          */

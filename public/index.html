@@ -2,18 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/styles.css"/>
     <title>Babu Chat</title>
 </head>
-<body>
-<p>Welcome to Babu-Chat</p>
+<body class="chat">
 
-<ol id="messages"></ol>
+<div class="chat__sidebar">
 
-<form id="message-form">
-    <input name="message" type="text" placeholder="enter your message here"/>
-<button>Send</button>
-</form>
-<button id="send-location">Send Location</button>
+    <h3>Babu - Bc</h3>
+<div id="users"></div>
+</div>
+
+
+<div class="chat__main">
+    <ol id="messages" class="chat__messages"></ol>
+
+    <div class="chat__footer">
+
+    <form id="message-form">
+        <input name="message" type="text" placeholder="enter your message here" autofocus autocomplete="off"/>
+        <button>Send</button>
+    </form>
+    <button id="send-location">Send Location</button>
+
+    </div>
+
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="js/libs/jquery-3.3.1.min.js"></script>
