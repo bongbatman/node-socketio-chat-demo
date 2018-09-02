@@ -38,6 +38,19 @@ socket.on('newMsg', function (msg) {
 
 });
 
+socket.on('newLocMsg', function (msg)  {
+    let li = jQuery('<li></li>');
+
+    //_blank tells browser to open new tab instead of redirecting current tab
+    let a = jQuery('<a target="_blank">My Current Location</a>');
+
+    //using these methods instead of template string injection keeps others from injecting into this code
+    li.text(`${msg.from}: `);
+    a.attr('href', msg.url);
+    li.append(a);
+    jQuery('#messages').append(li);
+});
+
 /**
  * Event with acknowledgement with call back function
  */
@@ -66,10 +79,28 @@ socket.on('newMsg', function (msg) {
 jQuery('#message-form').on('submit', function (e) { //selecting by id
    e.preventDefault();
     socket.emit('createMsg', {
-        from: "Nishant",
+        from: "User",
         text: jQuery('[name=message]').val() //selecting by name
     }, function (data) {
         console.log(`Got it (${data})`);
+    });
+});
+
+let locationBtn = jQuery('#send-location');
+
+locationBtn.on('click', function () {
+    if (!navigator.geolocation) {
+        return alert('Geolocation not supported');
+    }
+
+    navigator.geolocation.getCurrentPosition(function (pos) {
+        console.log(pos);
+        socket.emit('createLocMsg', {
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+        })
+    }, function () {
+       alert('Unable to fetch location') ;
     });
 });
 

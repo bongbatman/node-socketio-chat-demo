@@ -1,4 +1,4 @@
-let {generateMsg} = require('../utils/msg');
+let {generateMsg,generateLocMsg} = require('../utils/msg');
 
 describe('Generate Message', () => {
 
@@ -19,6 +19,26 @@ describe('Generate Message', () => {
         // expect(returnedMsg.text).toBe(msg.text);
         // expect(returnedMsg.from).toBe(msg.from);
         // expect(typeof returnedMsg.createdAt).toBe(typeof 90);
+
+    });
+
+});
+
+describe('Generate location message', () => {
+    it('should generate correct location object', function () {
+
+        let locMsg = {
+            from: "test case location",
+            latitude: 11,
+            longitude: 12,
+            url: "https://www.google.com/maps?q=11,12"
+        };
+
+        let returnedMsg = generateLocMsg(locMsg.from, locMsg.latitude, locMsg.longitude);
+
+        expect(returnedMsg.url).toBe(locMsg.url);
+
+
 
     });
 

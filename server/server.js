@@ -8,7 +8,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
 
-const {generateMsg} = require('./utils/msg');
+const {generateMsg, generateLocMsg} = require('./utils/msg');
 console.log(publicPath);
 
 const app = express();
@@ -60,6 +60,12 @@ io.on('connection', (socket) => {
         //     });
 
     });
+
+
+    socket.on('createLocMsg', (coords) => {
+        io.emit('newLocMsg', generateLocMsg("Admin", coords.latitude, coords.longitude));
+    });
+
     socket.on('disconnect', () => {
        console.log("User was disconnected");
     });
