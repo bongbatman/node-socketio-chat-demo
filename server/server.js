@@ -37,19 +37,19 @@ io.on('connection', (socket) => {
     // });
 
     //welcome new user
-    socket.emit('welcome', generateMsg("Admin", "Welcome to chat app"));
+    socket.emit('newMsg', generateMsg("Admin", "Welcome to chat app"));
 
     //broadcast new user to others
-    socket.broadcast.emit('newUserJoined', generateMsg("Admin", "New User Joined"));
+    socket.broadcast.emit('newMsg', generateMsg("Admin", "New User Joined"));
 
 
-    socket.on('createMsg', (msg) => {
+    socket.on('createMsg', (msg, callback) => {
         console.log(msg);
         /**
          * io.emit emits the msg to every connection
          */
         io.emit('newMsg', generateMsg(msg.from, msg.text));
-
+        callback("This is from server");
         /**
          * this is the way to broadcast events to everyone except the one who sent it
          */

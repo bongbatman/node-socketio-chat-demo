@@ -31,14 +31,45 @@ socket.on('disconnect', function () {
 // });
 socket.on('newMsg', function (msg) {
    console.log(`${msg.from} says: ${msg.text} at ${new Date(msg.createdAt)}`);
+   let li = jQuery('<li></li>');
+   li.text(`${msg.from}: ${msg.text}`);
+
+   jQuery('#messages').append(li);
+
 });
+
+/**
+ * Event with acknowledgement with call back function
+ */
+// socket.emit('createMsg', {
+//    from: "Karan",
+//    text: "hi"
+// }, function (data) {
+//     console.log(`Got it (${data})`);
+// });
+
+
 
 //welcome new user
-socket.on('welcome', function (msg) {
-    console.log(msg);
-});
+// socket.on('welcome', function (msg) {
+//     console.log(msg);
+// });
 
 //broadcast new user to others
-socket.on('newUserJoined', function (msg) {
-    console.log(msg);
+// socket.on('newUserJoined', function (msg) {
+//     console.log(msg);
+// });
+
+/**
+ * basic jQuery event using the id of element
+ */
+jQuery('#message-form').on('submit', function (e) { //selecting by id
+   e.preventDefault();
+    socket.emit('createMsg', {
+        from: "Nishant",
+        text: jQuery('[name=message]').val() //selecting by name
+    }, function (data) {
+        console.log(`Got it (${data})`);
+    });
 });
+
