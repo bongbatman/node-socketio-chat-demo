@@ -30,22 +30,24 @@ socket.on('disconnect', function () {
 //     console.log(`New email received from ${email.from}: \n ${email.text}`);
 // });
 socket.on('newMsg', function (msg) {
-   console.log(`${msg.from} says: ${msg.text} at ${new Date(msg.createdAt)}`);
+    let formattedTime = moment(msg.createdAt).format('hh:mm a');
+    console.log(`${msg.from} says: ${msg.text} at ${formattedTime}`);
    let li = jQuery('<li></li>');
-   li.text(`${msg.from}: ${msg.text}`);
+   li.text(`${msg.from} ${formattedTime}: ${msg.text}`);
 
    jQuery('#messages').append(li);
 
 });
 
 socket.on('newLocMsg', function (msg)  {
+    let formattedTime = moment(msg.createdAt).format('hh:mm a');
     let li = jQuery('<li></li>');
 
     //_blank tells browser to open new tab instead of redirecting current tab
     let a = jQuery('<a target="_blank">My Current Location</a>');
 
     //using these methods instead of template string injection keeps others from injecting into this code
-    li.text(`${msg.from}: `);
+    li.text(`${msg.from} ${formattedTime}: `);
     a.attr('href', msg.url);
     li.append(a);
     jQuery('#messages').append(li);
@@ -114,4 +116,5 @@ locationBtn.on('click', function () {
        alert('Unable to fetch location') ;
     });
 });
+
 
