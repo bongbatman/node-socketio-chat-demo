@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
 
     socket.on('createLocMsg', (coords) => {
-        io.emit('newLocMsg', generateLocMsg("Admin", coords.latitude, coords.longitude));
+        io.emit('newLocMsg', generateLocMsg("User", coords.latitude, coords.longitude));
     });
 
     socket.on('disconnect', () => {
