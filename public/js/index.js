@@ -1,6 +1,23 @@
 //frontend javascript
 let socket = io(); //initiates a request to open a connection
 
+function scrollToBottom () {
+    //selectors
+    let msgs = jQuery('#messages');
+    let newMsg = msgs.children('li:last-child');
+    //Heights
+    let clientHeight = msgs.prop('clientHeight');
+    let scrollTop = msgs.prop('scrollTop');
+    let scrollHeight = msgs.prop('scrollHeight');
+    let newMsgHeight = newMsg.innerHeight();
+    let lastMsgHeight = newMsg.prev().innerHeight();
+
+
+    if (clientHeight + scrollTop + newMsgHeight + lastMsgHeight >= scrollHeight) {
+      msgs.scrollTop(scrollHeight);
+    }
+}
+
 /**
  * way to do something on event on client side
  */
@@ -41,6 +58,7 @@ socket.on('newMsg', function (msg) {
 
 
     jQuery('#messages').append(html);
+    scrollToBottom();
    //  console.log(`${msg.from} says: ${msg.text} at ${formattedTime}`);
    // let li = jQuery('<li></li>');
    // li.text(`${msg.from} ${formattedTime}: ${msg.text}`);
@@ -59,6 +77,7 @@ socket.on('newLocMsg', function (msg)  {
     });
 
     jQuery('#messages').append(html);
+    scrollToBottom();
 
     // let li = jQuery('<li></li>');
     //
