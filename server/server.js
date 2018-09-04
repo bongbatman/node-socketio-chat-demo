@@ -30,18 +30,18 @@ io.on('connection', (socket) => {
     console.log("new user connected"); //registers an event listener
 
     socket.on('join', (params, callback) => {
-        if (!isRealString(params.name) || !isRealString(params.room)) {
+        if (!isRealString(params.name) || !isRealString(params.room.toLowerCase())) {
            return callback("Name and Room name are required") // never forget return baba
         }
 
-        socket.join(params.room);
+        socket.join(params.room.toLowerCase());
         users.removeUser(socket.id);
-        users.addUser(socket.id, params.name, params.room);
+        users.addUser(socket.id, params.name, params.room.toLowerCase());
 
         // console.log(users.getUserList(params.roomName));
 
         //now to send to a room this syntax has to used
-        io.in(params.room).emit('updateUserList', users.getUserList(params.room));
+        io.in(params.room.toLowerCase()).emit('updateUserList', users.getUserList(params.room.toLowerCase()));
 
         //socket.leave("office room") ---> leaves room
 
@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
         socket.emit('newMsg', generateMsg("Admin", "Welcome to chat app"));
 
         //broadcast new user to others
-        socket.broadcast.to(params.room).emit('newMsg', generateMsg("Admin", `${params.name} has joined`));
+        socket.broadcast.to(params.room.toLowerCase()).emit('newMsg', generateMsg("Admin", `${params.name} has joined`));
         callback();
     } );
 
