@@ -142,7 +142,6 @@ let msgTxtBox = jQuery('[name=message]'); //get reference to msg here
 jQuery('#message-form').on('submit', function (e) { //selecting by id
    e.preventDefault();
     socket.emit('createMsg', {
-        from: "User",
         text: msgTxtBox.val() //selecting by name
     }, function (data) {
 

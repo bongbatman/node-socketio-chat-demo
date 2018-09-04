@@ -70,31 +70,46 @@ io.on('connection', (socket) => {
 
 
     socket.on('createMsg', (msg, callback) => {
-        console.log(msg);
+        let user = users.getUser(socket.id);
         /**
          * io.emit emits the msg to every connection
          */
-        io.emit('newMsg', generateMsg(msg.from, msg.text));
+        // io.emit('newMsg', generateMsg(msg.from, msg.text));
         // callback("This is from server");
-        callback();
+        // callback();
         /**
          * this is the way to broadcast events to everyone except the one who sent it
          */
+
+
         // socket.broadcast.emit('newMsg', {
         //         from: msg.from,
         //         text: msg.text,
         //         createdAt: new Date().getTime()
         //     });
 
+        if (user && isRealString(msg.text)) {
+            io.in(user.roomName).emit('newMsg', generateMsg(user.name, msg.text));
+            callback();
+        }
+
     });
 
 
     socket.on('createLocMsg', (coords) => {
-        io.emit('newLocMsg', generateLocMsg("User", coords.latitude, coords.longitude));
+        let user = users.getUser(socket.id);
+        if (user) {
+            io.in(user.roomName).emit('newLocMsg', generateLocMsg(user.name, coords.latitude, coords.longitude));
+
+        }
     });
 
     socket.on('disconnect', () => {
-       let user = users.removeUser(socket.id);
+
+        /**
+         * socket.id is always available with any event
+         */
+        let user = users.removeUser(socket.id);
 
        if (user) {
            io.in(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
