@@ -8,12 +8,15 @@ const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
 
+const {isRealString} = require('./utils/validation');
 const {generateMsg, generateLocMsg} = require('./utils/msg');
+const {Users} = require('./utils/users');
 console.log(publicPath);
 
 const app = express();
 const server = http.createServer(app);//express uses http in bg so we can just pass app as argument
 let io = socketIO(server);
+let users = new Users();
 
 const port = process.env.PORT;
 
@@ -26,6 +29,33 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log("new user connected"); //registers an event listener
 
+    socket.on('join', (params, callback) => {
+        if (!isRealString(params.name) || !isRealString(params.room)) {
+           return callback("Name and Room name are required") // never forget return baba
+        }
+
+        socket.join(params.room);
+        users.removeUser(socket.id);
+        users.addUser(socket.id, params.name, params.room);
+
+        // console.log(users.getUserList(params.roomName));
+
+        //now to send to a room this syntax has to used
+        io.in(params.room).emit('updateUserList', users.getUserList(params.room));
+
+        //socket.leave("office room") ---> leaves room
+
+        //io.emit() ----> io.to(socket.id).emit() -----> emits private msg to a socket id
+        //socket.broadcast.emit() -----> socket.broadcast.to(params.room).emit() -----> everyone but the one sending
+
+
+        //welcome new user
+        socket.emit('newMsg', generateMsg("Admin", "Welcome to chat app"));
+
+        //broadcast new user to others
+        socket.broadcast.to(params.room).emit('newMsg', generateMsg("Admin", `${params.name} has joined`));
+        callback();
+    } );
 
     /**
      * emit custom event
@@ -36,11 +66,7 @@ io.on('connection', (socket) => {
     //     createdAt: 1999
     // });
 
-    //welcome new user
-    socket.emit('newMsg', generateMsg("Admin", "Welcome to chat app"));
 
-    //broadcast new user to others
-    socket.broadcast.emit('newMsg', generateMsg("Admin", "New User Joined"));
 
 
     socket.on('createMsg', (msg, callback) => {
@@ -68,7 +94,13 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-       console.log("User was disconnected");
+       let user = users.removeUser(socket.id);
+
+       if (user) {
+           io.in(user.roomName).emit('updateUserList', users.getUserList(user.roomName));
+           io.in(user.roomName).emit('newMsg', generateMsg("Admin", `${user.name} has left`));
+       }
+
     });
 
     /**
